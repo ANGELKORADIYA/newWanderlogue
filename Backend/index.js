@@ -14,13 +14,14 @@ const connectDB  = require("./config/db");
 
 
 connectDB();
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
 dotenv.config();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: false })); //true
+
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 

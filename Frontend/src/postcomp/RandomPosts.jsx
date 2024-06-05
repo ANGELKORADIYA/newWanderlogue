@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PostDetails from './PostDetails';
 import './randomposts.css';
-import { get } from '../Rest';
+import { post} from '../Rest';
 
 const RandomPosts = (props) => {
   const [allPosts, setAllPosts] = useState([]);
@@ -18,7 +18,7 @@ const RandomPosts = (props) => {
 
   const fetchMorePosts = async () => {
     setIsLoading(true);
-    const newPosts = await get('post/fetch-posts');
+    const newPosts = await post('post/fetch-posts');
     console.log(newPosts);
     setAllPosts((prevPosts) => [...prevPosts, ...newPosts]);
     setIsLoading(false);
