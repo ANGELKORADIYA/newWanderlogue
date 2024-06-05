@@ -1,0 +1,11 @@
+.post-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    transition: margin-left 0.5s ease; /* Add transition */
+    justify-content: center;
+  }
+  .post-list-onsiderbar{
+    margin-left: 300px;
+    transition: margin-left 0.1s ease; /* Add transition */
+}

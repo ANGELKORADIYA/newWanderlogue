@@ -1,0 +1,44 @@
+.photo-gallery {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .photo-container {
+    position: relative;
+  }
+  
+  .photo-container img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .photo-container:hover .overlay {
+    opacity: 1;
+  }
+  
+  .overlay button {
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+  }
+  
+  .photo-indicator {
+    text-align: center;
+    margin-top: 10px;
+  }
+  

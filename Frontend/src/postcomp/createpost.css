@@ -1,0 +1,118 @@
+/* UploadForm.css */
+
+.upload-form-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.upload-form-container h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type='text'],
+input[type='date'],
+textarea {
+  width: 97%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button[type='submit'] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button[type='submit']:hover {
+  background-color: #0056b3;
+}
+
+
+/* UploadForm.css */
+
+/* Custom dropdown */
+.select-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.select-wrapper select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  padding: 10px;
+  width: calc(100% - 22px); /* Adjusted width to match the input fields */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Styling for selected option */
+.select-wrapper::after {
+  content: '\25BC'; /* Unicode character for down arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Styling for radio buttons */
+.rating {
+  display: flex;
+  align-items: center;
+}
+
+.rating input[type="radio"] {
+  display: none;
+}
+
+.rating label {
+  font-size: 24px;
+  color: #ccc;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+  color: #ffcc00;
+}
+
+.rating input[type="radio"]:checked ~ label {
+  color: #ffcc00;
+}
+
+/* Adjust rating alignment */
+.rating label {
+  flex: 1;
+  text-align: center;
+}
