@@ -30,7 +30,6 @@ module.exports.myposts = async function (req, res) {
   try {
     const existingDashboard = await postModel.find(
       { userId: req.userId },
-      { __v: false, _id: false }
     );
     res.status(200).json(existingDashboard);
   } catch (error) {

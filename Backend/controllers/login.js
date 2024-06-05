@@ -85,11 +85,9 @@ module.exports.email = async (req, res) => {
     if (
       req.headers.hasOwnProperty("token") &&
       req.headers.token != "" &&
-      req.headers.token != "undefined" &&
-      req.headers.token > 0
+      req.headers.token != "undefined"
     ) {
-      console.log(req.headers.token);
-      const valid = jwt.verify(req.headers.token, process.env.SECRET_KEY);
+        const valid = jwt.verify(req.headers.token, process.env.SECRET_KEY);
       const projection = { _id: 0, password: 0, __v: 0 };
       const result = await loginModel.findOne(
         { _id: valid.email },

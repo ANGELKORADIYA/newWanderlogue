@@ -1,13 +1,14 @@
 import React from "react";
 import Cookies from "js-cookie";
-const URL = "http://localhost:8383/";
+
+
 export const post = async (url, payload) => {
   try {
     document.body.style.cursor = "wait"; 
 
     let cookies = document.cookie;
-    console.log(payload);
-    const response = await fetch(`${URL}${url}`, {
+    console.log(payload ,url);
+    const response = await fetch(`${import.meta.env.VITE_BE_URL}${url}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

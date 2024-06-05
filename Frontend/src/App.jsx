@@ -27,10 +27,10 @@ const App = () => {
   const [cookie, setCookie] = useState(document.cookie);
   const [isAuthenticated, setIsAuthenticated] = useState(!!cookie);
   useEffect(() => {
-    (async () =>
-      (await post("email")) == false
+    (async () =>{
+      ((await post("email")).okk) == false
         ? setIsAuthenticated(false)
-        : setIsAuthenticated(!!cookie))();
+        : setIsAuthenticated(!!cookie)})();
   }, [cookie]);
   return (
     <Router>

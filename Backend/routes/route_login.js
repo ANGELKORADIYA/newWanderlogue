@@ -4,13 +4,7 @@ const path = require("path");
 
 const { signup, login, signout, email } = require("../controllers/login");
 
-route_login.get("/", async (req, res) => {
-  res
-    .status(200)
-    .sendFile(
-      path.resolve(__dirname, "..", "..", "client", "public", "a.html")
-    );
-});
+
 
 route_login.post("/signup", signup);
 
