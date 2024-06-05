@@ -7,6 +7,6 @@ route_post.post("/createpost", createpost);
 
 route_post.post("/my-posts", myposts);
 
-route_post.get("/fetch-posts", fetchposts);
+route_post.post("/fetch-posts", fetchposts);
 
 module.exports.route_post = route_post;
