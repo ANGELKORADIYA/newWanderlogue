@@ -8,7 +8,7 @@ const PostList = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {(setposts(await post("post/my-posts")))
+    (async () => {(setposts(await post(`post/${props.siteurl}`))) 
     setIsLoading(false)
   })();
     

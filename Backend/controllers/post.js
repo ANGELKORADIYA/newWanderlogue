@@ -1,6 +1,5 @@
 const { mongoose } = require("mongoose");
 
-
 const {
   postModel,
   favoriteModel,
@@ -28,9 +27,7 @@ module.exports.createpost = async function (req, res) {
 
 module.exports.myposts = async function (req, res) {
   try {
-    const existingDashboard = await postModel.find(
-      { userId: req.userId },
-    );
+    const existingDashboard = await postModel.find({ userId: req.userId });
     res.status(200).json(existingDashboard);
   } catch (error) {
     console.log(error);
@@ -40,10 +37,19 @@ module.exports.myposts = async function (req, res) {
 
 module.exports.fetchposts = async function (req, res) {
   try {
-    let randomEmails = await postModel.aggregate([
-      { $sample: { size: 5 } },
-    ]);
+    let randomEmails = await postModel.aggregate([{ $sample: { size: 5 } }]);
     res.status(200).json(randomEmails);
+  } catch (error) {
+    console.log(error);
+    res.status(200).json([]);
+  }
+};
+
+module.exports.fetchfavorites = async function (req, res) {
+  try {
+    const postIdsfromUserId = await favoriteModel.find({ userId: req.userId });
+    const posts = await postModel.find({ _id: { $in: postIdsfromUserId[0].postId } });
+    res.status(200).json(posts);
   } catch (error) {
     console.log(error);
     res.status(200).json([]);

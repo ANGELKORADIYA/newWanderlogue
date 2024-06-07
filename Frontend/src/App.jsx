@@ -14,7 +14,7 @@ import Navbar from "./navbar/Navbar";
 import Lander from "./login/Lander";
 import Sidebar from "./gencomp/Sidebar";
 import AboutUs from "./gencomp/AboutUs";
-import ContantUs from "./gencomp/ContactUs";
+import ContactUs from "./gencomp/ContactUs"; // Fixed import typo
 import Footer from "./gencomp/Footer";
 import SignInPopup from "./login/SignIn";
 import SignupPopup from "./login/SignUp";
@@ -23,41 +23,49 @@ import PostList from "./postcomp/PostList";
 import RandomPosts from "./postcomp/RandomPosts";
 
 const App = () => {
-  const [isSidebarActive, setIsSidebarActive] = useState(false); 
+  const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [cookie, setCookie] = useState(document.cookie);
   const [isAuthenticated, setIsAuthenticated] = useState(!!cookie);
+
   useEffect(() => {
-    (async () =>{
-      ((await post("email")).okk) == false
-        ? setIsAuthenticated(false)
-        : setIsAuthenticated(!!cookie)})();
+    const checkAuthentication = async () => {
+      try {
+        const response = await post("email");
+        setIsAuthenticated(response.okk);
+      } catch (error) {
+        setIsAuthenticated(false);
+      }
+    };
+    checkAuthentication();
   }, [cookie]);
+
   return (
     <Router>
+      <ToastContainer />
+      <Navbar
+        setIsSidebarActive={setIsSidebarActive}
+        isSidebarActive={isSidebarActive}
+        isAuthenticated={isAuthenticated}
+        changecookie={setCookie}
+      />
+      <Sidebar
+        setIsSidebarActive={setIsSidebarActive}
+        isSidebarActive={isSidebarActive}
+      />
       <Routes>
-      <Route
+        <Route
           path="/"
           element={
             isAuthenticated ? (
               <Navigate to="/dashboard" />
             ) : (
               <>
-                <ToastContainer />
-                <Navbar
-                  setIsSidebarActive={setIsSidebarActive}
-                  isSidebarActive={isSidebarActive}
-                  isAuthenticated={isAuthenticated}
-                />
-                <Sidebar
-                  setIsSidebarActive={setIsSidebarActive}
-                  isSidebarActive={isSidebarActive}
-                />
+              
                 <Lander type={null} changecookie={setCookie} />
               </>
             )
           }
         />
-
         <Route
           path="/login"
           element={
@@ -65,19 +73,7 @@ const App = () => {
               <Navigate to="/dashboard" />
             ) : (
               <>
-                <ToastContainer />
-                <Navbar
-                  setIsSidebarActive={setIsSidebarActive}
-                  isSidebarActive={isSidebarActive}
-                  isAuthenticated={isAuthenticated}
-                />
-                <Sidebar
-                  setIsSidebarActive={setIsSidebarActive}
-                  isSidebarActive={isSidebarActive}
-                />
                 <Lander type={"signIn"} changecookie={setCookie} />
-
-                <Footer />
               </>
             )
           }
@@ -89,17 +85,6 @@ const App = () => {
               <Navigate to="/dashboard" />
             ) : (
               <>
-                <ToastContainer />
-
-                <Navbar
-                  setIsSidebarActive={setIsSidebarActive}
-                  isSidebarActive={isSidebarActive}
-                  isAuthenticated={isAuthenticated}
-                />
-                <Sidebar
-                  setIsSidebarActive={setIsSidebarActive}
-                  isSidebarActive={isSidebarActive}
-                />
                 <Lander type={"signUp"} changecookie={setCookie} />
               </>
             )
@@ -109,19 +94,7 @@ const App = () => {
           path="/contactus"
           element={
             <>
-              <Navbar
-                setIsSidebarActive={setIsSidebarActive}
-                isSidebarActive={isSidebarActive}
-                isAuthenticated={isAuthenticated}
-              />
-              <Sidebar
-                setIsSidebarActive={setIsSidebarActive}
-                isSidebarActive={isSidebarActive}
-              />
-
-              <ContantUs />
-
-              <Footer />
+              <ContactUs />
             </>
           }
         />
@@ -129,19 +102,7 @@ const App = () => {
           path="/aboutus"
           element={
             <>
-              <Navbar
-                setIsSidebarActive={setIsSidebarActive}
-                isSidebarActive={isSidebarActive}
-                isAuthenticated={isAuthenticated}
-              />
-              <Sidebar
-                setIsSidebarActive={setIsSidebarActive}
-                isSidebarActive={isSidebarActive}
-              />
-
               <AboutUs />
-
-              <Footer />
             </>
           }
         />
@@ -150,41 +111,19 @@ const App = () => {
           element={
             isAuthenticated ? (
               <>
-                <Navbar
-                  setIsSidebarActive={setIsSidebarActive}
-                  isSidebarActive={isSidebarActive}
-                  isAuthenticated={isAuthenticated}
-                />
-                <Sidebar
-                  setIsSidebarActive={setIsSidebarActive}
-                  isSidebarActive={isSidebarActive}
-                />
-
                 <RandomPosts isSidebarActive={isSidebarActive} />
-
-                <Footer />
               </>
             ) : (
               <Navigate to="/" />
             )
           }
         />
-        
         <Route
           path="/createpost"
           element={
             isAuthenticated ? (
               <>
-                
-                <Navbar isAuthenticated={isAuthenticated} />
-                <Sidebar
-                  setIsSidebarActive={setIsSidebarActive}
-                  isSidebarActive={isSidebarActive}
-                />
-               
                 <CreatePost />
-               
-                <Footer />
               </>
             ) : (
               <Navigate to="/login" />
@@ -196,24 +135,28 @@ const App = () => {
           element={
             isAuthenticated ? (
               <>
-                
-                <Navbar isAuthenticated={isAuthenticated} />
-                <Sidebar
-                  setIsSidebarActive={setIsSidebarActive}
-                  isSidebarActive={isSidebarActive}
-                />
-                
-                <PostList isSidebarActive={isSidebarActive} />
-
-                <Footer />
+                <PostList isSidebarActive={isSidebarActive}  siteurl="my-posts" />
               </>
             ) : (
               <Navigate to="/login" />
             )
           }
-        /> 
+        />
+        <Route
+          path="/yourfavorite"
+          element={
+            isAuthenticated ? (
+              <>
+                <PostList isSidebarActive={isSidebarActive} siteurl="my-favorites" />
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
+      <Footer />
     </Router>
   );
 };

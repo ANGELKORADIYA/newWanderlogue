@@ -8,7 +8,7 @@ import {
   InputBase,
   Box,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
@@ -94,14 +94,16 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const App = ({ setIsSidebarActive, isSidebarActive, isAuthenticated }) => {
+const Navbar = ({ setIsSidebarActive, isSidebarActive, isAuthenticated ,changecookie}) => {
+  const navigate = useNavigate();
   const toggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
   };
-
+   changecookie(document.cookie);
   const handleLogout = () => {
     document.cookie = "token=;expires=" + new Date().toUTCString();
-    window.location = window.location.href;
+    
+    navigate('/login');
   };
 
   return (
@@ -138,6 +140,9 @@ const App = ({ setIsSidebarActive, isSidebarActive, isAuthenticated }) => {
           <StyledLink to="/yourpost">
             <StyledButton>Your Post</StyledButton>
           </StyledLink>
+          <StyledLink to="/yourfavorite">
+            <StyledButton>Your Likes</StyledButton>
+          </StyledLink>
         </Box>
         <Box display="flex" alignItems="center">
           {isAuthenticated ? (
@@ -169,4 +174,4 @@ const App = ({ setIsSidebarActive, isSidebarActive, isAuthenticated }) => {
   );
 };
 
-export default App;
+export default Navbar;
