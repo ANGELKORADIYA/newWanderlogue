@@ -19,7 +19,7 @@ const postSchema = new mongoose.Schema({
 
 const favoriteSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-  postId: { type: mongoose.Schema.Types.ObjectId, ref: "post" },
+  postId: [{ type: mongoose.Schema.Types.ObjectId, ref: "post" }],
 });
 
 const starSchema = new mongoose.Schema({

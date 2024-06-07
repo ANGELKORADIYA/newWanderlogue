@@ -9,6 +9,7 @@ const { route_login } = require("./routes/route_login");
 const { tokenverification } = require("./middlewares/tokenverification");
 const { route_post } = require("./routes/route_post");
 const { route_favorites } = require("./routes/route_favorites");
+const { route_comments } = require("./routes/route_comments");
 const connectDB  = require("./config/db");
 
 
@@ -30,6 +31,7 @@ app.use(tokenverification)
 app.use('/post',route_post)
 
 app.use('/favorites',route_favorites)
+app.use('/comments',route_comments)
 
 app.listen(process.env.port, () => {
   console.log(`Server is Running on ${process.env.baseUrl} at ${process.env.port}`);

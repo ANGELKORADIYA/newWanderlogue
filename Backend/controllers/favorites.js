@@ -59,6 +59,12 @@ module.exports.postLikes = async function (req, res) {
         ) {
           existingDashboard.favorites.splice(i, 1);
           await existingDashboard.save();
+
+          const newFavorites = await favoriteModel.updateOne(
+            { userId: req.userId },
+            { $pull: { postId: req.body.postId } }
+          );
+
           return res.status(200).json({
             likedhowmany: existingDashboard.favorites.length,
             likedset: false,
@@ -68,6 +74,13 @@ module.exports.postLikes = async function (req, res) {
 
       existingDashboard.favorites.push(req.userId);
       await existingDashboard.save();
+
+      const newFavorites = await favoriteModel.findOneAndUpdate(
+        { userId: req.userId },
+        { $push: { postId: req.body.postId } },
+        { new: true }
+      );
+
       return res.status(200).json({
         likedhowmany: existingDashboard.favorites.length,
         likedset: true,
@@ -76,6 +89,17 @@ module.exports.postLikes = async function (req, res) {
       // If there are no favorites, initialize and add the userId
       existingDashboard.favorites = [req.userId];
       await existingDashboard.save();
+      const newFavorites = await favoriteModel.findOneAndUpdate(
+        { userId: req.userId },
+        { $push: { postId: req.body.postId } },
+        { new: true }
+      );
+      if (!newFavorites) {
+        const newFavorites = await favoriteModel.create({
+          userId: req.userId,
+          postId: [req.body.postId],
+        });
+      }
       return res.status(200).json({
         likedhowmany: existingDashboard.favorites.length,
         likedset: true,
