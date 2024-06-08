@@ -143,6 +143,9 @@ const Navbar = ({ setIsSidebarActive, isSidebarActive, isAuthenticated ,changeco
           <StyledLink to="/yourfavorite">
             <StyledButton>Your Likes</StyledButton>
           </StyledLink>
+          <StyledLink to="/yourcomment">
+            <StyledButton>Your Comments</StyledButton>
+          </StyledLink>
         </Box>
         <Box display="flex" alignItems="center">
           {isAuthenticated ? (

@@ -11,5 +11,7 @@ route_post.post("/fetch-posts", fetchposts);
 
 route_post.post("/my-favorites", fetchfavorites);
 
+route_post.post("/my-comments", fetchfavorites);
+
 
 module.exports.route_post = route_post;

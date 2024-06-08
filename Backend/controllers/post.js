@@ -55,3 +55,14 @@ module.exports.fetchfavorites = async function (req, res) {
     res.status(200).json([]);
   }
 };
+
+module.exports.fetchcomments = async function (req, res) {
+  try {
+    const postIdsfromUserId = await commentModel.find({ userId: req.userId });
+    const posts = await postModel.find({ _id: { $in: postIdsfromUserId[0].postId } });
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log(error);
+    res.status(200).json([]);
+  }
+};

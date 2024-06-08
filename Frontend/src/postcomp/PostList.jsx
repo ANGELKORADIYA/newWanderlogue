@@ -4,15 +4,30 @@ import './postlist.css';
 import { post,get } from '../Rest';
 
 const PostList = (props) => {
-  const [posts, setposts] = useState([])
   const [isLoading, setIsLoading] = useState(true);
-
+  
+  const [posts, setposts] = useState([])
+  
   useEffect(() => {
-    (async () => {(setposts(await post(`post/${props.siteurl}`))) 
-    setIsLoading(false)
-  })();
-    
-  }, [])
+    let isMounted = true; // Track if the component is mounted
+
+    const fetchPosts = async () => {
+      setIsLoading(true);
+      setposts([]); // Clear previous posts
+      const fetchedPosts = await post(`post/${props.siteurl}`);
+      if (isMounted) {
+        setposts(fetchedPosts);
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+
+    return () => {
+      isMounted = false; // Cleanup function to avoid setting state on unmounted component
+    };
+  }, [props.siteurl]);
+
   return (<div className={`random-posts  ${props.isSidebarActive?"post-list-onsiderbar":""}`} >
       {posts.map((postData, index) => (
         <>

@@ -21,7 +21,7 @@ import SignupPopup from "./login/SignUp";
 import CreatePost from "./postcomp/CreatePost";
 import PostList from "./postcomp/PostList";
 import RandomPosts from "./postcomp/RandomPosts";
-
+import CommentHolder from "./gencomment/CommentHolder";
 const App = () => {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [cookie, setCookie] = useState(document.cookie);
@@ -148,6 +148,20 @@ const App = () => {
             isAuthenticated ? (
               <>
                 <PostList isSidebarActive={isSidebarActive} siteurl="my-favorites" />
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/yourcomment"
+          element={
+            isAuthenticated ? (
+              <>
+                <PostList isSidebarActive={isSidebarActive}  siteurl="my-comments" />
+
+                {/* <CommentHolder /> */}
               </>
             ) : (
               <Navigate to="/login" />
