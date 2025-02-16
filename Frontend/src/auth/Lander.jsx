@@ -40,9 +40,9 @@ const ContentContainer = styled(Paper)(({ theme }) => ({
   borderRadius: "15px",
   overflow: "hidden",
   boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-  transition: "border 0.3s ease-in-out",
+  transition: "border 0.2s ease-in-out",
   "&:hover": {
-    border: "2px solid #ff7e5f",
+    border: "2px solid #000000",
   },
 }));
 
@@ -76,18 +76,21 @@ const LandingPage = (props) => {
   useEffect(() => {
     setinorout(props.type);
   }, [props.type]);
-
+  const onSignUpSuccess = () => {
+    setinorout("signIn");
+  }
   return (
     <>
       <RootBox>
         <ContentContainer>
           <ImageContainer />
           <TextContainer>
-            <Typography variant="h2" gutterBottom>
-              Welcome to Wanderlogue
+            <Typography variant="h3" gutterBottom>
+              Welcome to {props.title}
             </Typography>
             <Typography variant="h5" gutterBottom>
               Explore the world, one post at a time.
+
             </Typography>
             <ButtonContainer>
               <Button
@@ -110,14 +113,10 @@ const LandingPage = (props) => {
         </ContentContainer>
       </RootBox>
       {inorout == "signIn" && (
-        <SignInPopup open={true}  
-        changecookie={props.changecookie}
-        
-        setinorout={setinorout} />
+        <SignInPopup open={true} setinorout={setinorout} changecookie={props.changecookie} />
       )}
       {inorout == "signUp" && (
-        <SignUpPopup open={true} 
-        setinorout={setinorout} />
+        <SignUpPopup open={true} onSignUpSuccess={onSignUpSuccess} setinorout={setinorout} />
       )}
     </>
   );

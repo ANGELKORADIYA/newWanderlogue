@@ -2,9 +2,47 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 100%;
   }
   
   .loadmore {
     margin: 20px 0;
   }
   
+.grid-container {
+  display: grid;
+  grid-template-columns: 0.5fr 1.5fr 1fr;
+
+  gap: 20px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  background-color: #007bff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.sidebar a {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar a:hover {
+  background-color: #0056b3;
+}
+
+.ads {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

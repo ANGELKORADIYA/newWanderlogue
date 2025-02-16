@@ -41,14 +41,18 @@ const StyledButton = styled(Button)({
   marginTop: "1rem",
 });
 
-const SignInPopup = (props) => {
+const SignInPopup = ({ open, setinorout , changecookie }) => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = async (evt) => {
     evt.preventDefault();
+    document.body.style.cursor = "wait"; // Change cursor to wait
+    setLoading(true); // Set loading state to true
+
     try {
       const response = await post("login", { email, password });
 
@@ -56,7 +60,8 @@ const SignInPopup = (props) => {
         document.cookie = `token=${response.token};expires=${new Date(
           new Date().getTime() + 1 * 60 * 60 * 10000
         ).toUTCString()};`;
-        toast.success("🦄 log in Sucessfully !!", {
+
+        toast.success("🦄 Log in Successfully !!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -66,8 +71,7 @@ const SignInPopup = (props) => {
           progress: undefined,
           theme: "light",
         });
-
-        await props.changecookie(document.cookie);
+        changecookie(document.cookie);
         navigate("/dashboard");
       } else {
         toast.warn(response.message, {
@@ -84,12 +88,26 @@ const SignInPopup = (props) => {
         setPassword("");
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      toast.error("Login failed. Please try again.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } finally {
+      setTimeout(() => {
+        document.body.style.cursor = "default"; // Reset cursor after processing
+      }, 1500);
+      setLoading(false); // Set loading state to false after request completion
     }
   };
 
   return (
-    <StyledDialog open={props.open} onClose={() => props.setinorout(null)}>
+    <StyledDialog open={open} onClose={() => setinorout(null)}>
       <StyledDialogTitle>Sign In</StyledDialogTitle>
       <StyledDialogContent>
         <StyledTextField
@@ -97,6 +115,8 @@ const SignInPopup = (props) => {
           variant="outlined"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
+          aria-label="Email Address"
         />
         <StyledTextField
           label="Password"
@@ -104,20 +124,21 @@ const SignInPopup = (props) => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
+          aria-label="Password"
         />
         <StyledButton
           variant="contained"
           color="primary"
-          onClick={(evt) => handleSignIn(evt)}
+          onClick={handleSignIn}
           fullWidth
+          disabled={loading}
         >
-          Sign In
+          {loading ? "Signing In..." : "Sign In"}
         </StyledButton>
         <StyledButton
           color="primary"
-          onClick={() => {
-            props.setinorout(null);
-          }}
+          onClick={() => setinorout(null)}
           fullWidth
         >
           Cancel

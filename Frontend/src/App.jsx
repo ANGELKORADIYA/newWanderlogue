@@ -11,33 +11,65 @@ import "./app.css";
 
 import { post } from "./Rest";
 import Navbar from "./navbar/Navbar";
-import Lander from "./login/Lander";
+import Lander from "./auth/Lander";
 import Sidebar from "./gencomp/Sidebar";
 import AboutUs from "./gencomp/AboutUs";
-import ContactUs from "./gencomp/ContactUs"; // Fixed import typo
+import ContactUs from "./gencomp/ContactUs";
 import Footer from "./gencomp/Footer";
-import SignInPopup from "./login/SignIn";
-import SignupPopup from "./login/SignUp";
 import CreatePost from "./postcomp/CreatePost";
 import PostList from "./postcomp/PostList";
 import RandomPosts from "./postcomp/RandomPosts";
 import CommentHolder from "./gencomment/CommentHolder";
+
 const App = () => {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [cookie, setCookie] = useState(document.cookie);
-  const [isAuthenticated, setIsAuthenticated] = useState(!!cookie);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
-    const checkAuthentication = async () => {
+    const checkAuthentication = async (attempt = 1) => {
+      const maxAttempts = 10;
+      const timeout = 2000; // 2 seconds
+
       try {
-        const response = await post("email");
-        setIsAuthenticated(response.okk);
+        const response = await Promise.race([
+          post("email"),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Timeout")), timeout)
+          ),
+        ]);
+        setEmail(response.email);
+        if (response.okk) {
+          setIsAuthenticated(true);
+          return;
+        }
       } catch (error) {
-        setIsAuthenticated(false);
+        if (attempt < maxAttempts) {
+          console.log(`Attempt ${attempt} failed. Retrying...`);
+          setTimeout(() => checkAuthentication(attempt + 1), timeout);
+        } else {
+          console.error("All attempts failed. Setting isAuthenticated to false.");
+          setIsAuthenticated(false);
+        }
       }
     };
+
     checkAuthentication();
   }, [cookie]);
+
+  const title = "wanderlogue";
+
+  const AuthRoute = ({
+    element = <Navigate to="/dashboard" />,
+    type = "signIn",
+  }) => {
+    return isAuthenticated ? (
+      element
+    ) : (
+      <Lander type={type} title={title} changecookie={setCookie} />
+    );
+  };
 
   return (
     <Router>
@@ -47,6 +79,7 @@ const App = () => {
         isSidebarActive={isSidebarActive}
         isAuthenticated={isAuthenticated}
         changecookie={setCookie}
+        title={title}
       />
       <Sidebar
         setIsSidebarActive={setIsSidebarActive}
@@ -56,119 +89,82 @@ const App = () => {
         <Route
           path="/"
           element={
-            isAuthenticated ? (
-              <Navigate to="/dashboard" />
-            ) : (
-              <>
-              
-                <Lander type={null} changecookie={setCookie} />
-              </>
-            )
+            <AuthRoute element={<Navigate to="/dashboard" />} type={"signIn"} />
           }
         />
         <Route
           path="/login"
           element={
-            isAuthenticated ? (
-              <Navigate to="/dashboard" />
-            ) : (
-              <>
-                <Lander type={"signIn"} changecookie={setCookie} />
-              </>
-            )
+            <AuthRoute element={<Navigate to="/dashboard" />} type={"signIn"} />
           }
         />
         <Route
           path="/signup"
           element={
-            isAuthenticated ? (
-              <Navigate to="/dashboard" />
-            ) : (
-              <>
-                <Lander type={"signUp"} changecookie={setCookie} />
-              </>
-            )
+            <AuthRoute element={<Navigate to="/dashboard" />} type={"signUp"} />
           }
         />
-        <Route
-          path="/contactus"
-          element={
-            <>
-              <ContactUs />
-            </>
-          }
-        />
-        <Route
-          path="/aboutus"
-          element={
-            <>
-              <AboutUs />
-            </>
-          }
-        />
+        <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/aboutus" element={<AboutUs />} />
         <Route
           path="/dashboard"
           element={
-            isAuthenticated ? (
-              <>
-                <RandomPosts isSidebarActive={isSidebarActive} />
-              </>
-            ) : (
-              <Navigate to="/" />
-            )
+            <AuthRoute
+              element={<RandomPosts isSidebarActive={isSidebarActive} />}
+              type={"signIn"}
+            />
           }
         />
         <Route
           path="/createpost"
-          element={
-            isAuthenticated ? (
-              <>
-                <CreatePost />
-              </>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
+          element={<AuthRoute element={<CreatePost />} type={"signIn"} />}
         />
         <Route
           path="/yourpost"
           element={
-            isAuthenticated ? (
-              <>
-                <PostList isSidebarActive={isSidebarActive}  siteurl="my-posts" />
-              </>
-            ) : (
-              <Navigate to="/login" />
-            )
+            <AuthRoute
+              element={
+                <PostList
+                  isSidebarActive={isSidebarActive}
+                  siteurl="my-posts"
+                />
+              }
+              type={"signIn"}
+            />
           }
         />
         <Route
           path="/yourfavorite"
           element={
-            isAuthenticated ? (
-              <>
-                <PostList isSidebarActive={isSidebarActive} siteurl="my-favorites" />
-              </>
-            ) : (
-              <Navigate to="/login" />
-            )
+            <AuthRoute
+              element={
+                <PostList
+                  isSidebarActive={isSidebarActive}
+                  siteurl="my-favorites"
+                />
+              }
+              type={"signIn"}
+            />
           }
         />
         <Route
           path="/yourcomment"
           element={
-            isAuthenticated ? (
-              <>
-                <PostList isSidebarActive={isSidebarActive}  siteurl="my-comments" />
-
-                {/* <CommentHolder /> */}
-              </>
-            ) : (
-              <Navigate to="/login" />
-            )
+            <AuthRoute
+              element={
+                <PostList
+                  isSidebarActive={isSidebarActive}
+                  siteurl="my-comments"
+                />
+              }
+              type={"signIn"}
+            />
           }
         />
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/trending" element={<PostList siteurl="trending" />} />
+        <Route path="/top-commented" element={<PostList siteurl="top-commented" />} />
+        <Route path="/popular" element={<PostList siteurl="popular" />} />
+        <Route path="*" element={<>404 not found</>} />
       </Routes>
       <Footer />
     </Router>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PostDetails from './PostDetails';
 import './randomposts.css';
-import { post} from '../Rest';
-
+import { post } from '../Rest';
+import { Link } from 'react-router-dom';
 const RandomPosts = (props) => {
   const [allPosts, setAllPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,15 +37,26 @@ const RandomPosts = (props) => {
   };
 
   return (
-    <div className={`random-posts ${props.isSidebarActive ? 'post-list-onsiderbar' : ''}`}>
-      {allPosts.length > 0 &&
-        allPosts.map((postData, index) => (
+    <div className="grid-container">
+      <div className="sidebar">
+        <Link to="/trending">Trending Posts</Link>
+        <Link to="/top-commented">Top Commented Posts</Link>
+        <Link to="/popular">Popular Posts</Link>
+      </div> 
+      <div className={`random-posts ${props.isSidebarActive ? 'post-list-onsiderbar' : ''}`}>
+        {allPosts.length > 0 &&
+          allPosts.map((postData, index) => (
             <PostDetails key={index} postData={postData} />
-        ))}
+          ))}
 
-      {isLoading && <p className='loadmore'>Loading...</p>}
-      {!isLoading && <button onClick={handleLoadMore} className='loadmore'>Load More ...</button>}
+        {isLoading && <p className='loadmore'>Loading...</p>}
+        {!isLoading && <button onClick={handleLoadMore} className='loadmore'>Load More ...</button>}
+      </div>
+      <div className="ads">
+        {/* <GoogleAdsComponent /> */}
+      </div>  
     </div>
+
   );
 };
 

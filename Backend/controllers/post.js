@@ -66,3 +66,33 @@ module.exports.fetchcomments = async function (req, res) {
     res.status(200).json([]);
   }
 };
+
+module.exports.getTrendingPosts = async (req, res) => {
+  try {
+    const trendingPosts = await postModel.find().sort({ views: -1 }).limit(5);
+    res.status(200).json(trendingPosts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+module.exports.getTopCommentedPosts = async (req, res) => {
+  try {
+    const topCommentedPosts = await postModel.find().sort({ comments: -1 }).limit(5);
+    res.status(200).json(topCommentedPosts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+module.exports.getPopularPosts = async (req, res) => {
+  try {
+    const popularPosts = await postModel.find().sort({ likes: -1 }).limit(5);
+    res.status(200).json(popularPosts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};

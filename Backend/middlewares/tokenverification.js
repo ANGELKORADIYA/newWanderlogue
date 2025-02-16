@@ -1,24 +1,30 @@
-const { tokenemail} = require("../controllers/login");
+const { tokenemail } = require("../controllers/auth");
 
 async function tokenverification(req, res, next) {
   try {
-    if (req.headers && req.headers.hasOwnProperty("token")) {
-
-    const {tokentoemail,tokentouserId,tokentoauthor} = await tokenemail(req,res);
-    if (tokentoemail === false) {
-      // res.cookie("token", "", { expires: new Date() })
-      res.status(401).json("no tokentoemail");
-    } else {
-      req.email=tokentoemail;
-      req.userId = tokentouserId;
-      req.author= tokentoauthor; 
-      next()
+    if (
+      (req.headers &&
+        req.headers.hasOwnProperty("token") &&
+        !req.headers.token) ||
+      req.headers.token == "undefined"
+    ) {
+      return res.status(401).json({ message: "No token provided" });
     }
-  } else {
-    res.status(401).json("no token");
-  }
+    const  authed = await tokenemail(
+      req,
+      res
+    );
+    if (!authed) {
+      // res.cookie("token", "", { expires: new Date() })
+      return res.status(401).json({ message: "Invalid token" });
+
+    } 
+      req.email =  authed.tokentoemail;
+      req.userId = authed.tokentouserId;
+      req.author = authed.tokentoauthor;
+      next();
   } catch (error) {
-    console.log("tokenverification" , error);
+    console.log("tokenverification", error);
   }
 }
 

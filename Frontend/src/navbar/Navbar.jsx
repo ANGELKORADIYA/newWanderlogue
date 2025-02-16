@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -13,12 +13,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled } from "@mui/material/styles";
-import logo from "./logo.png"; 
+import logo from "./logo.png";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   flexGrow: 1,
-
-  background: "linear-gradient(135deg, #feb47f, #ff7e5f)",
+  background: "linear-gradient(135deg, #110011, #111a50)",
 }));
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -65,8 +64,8 @@ const StyledSearchIcon = styled("div")(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "black",
-  padding: theme.spacing(1, 1, 1, 0),
-  paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+  padding: theme.spacing(0.5, 0.5, 0.5, 0.5),
+  paddingLeft: `calc(1em + ${theme.spacing(3.5)})`,
   transition: theme.transitions.create("width"),
   width: "100%",
   [theme.breakpoints.up("md")]: {
@@ -94,16 +93,24 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const Navbar = ({ setIsSidebarActive, isSidebarActive, isAuthenticated ,changecookie}) => {
+const Navbar = ({
+  setIsSidebarActive,
+  isSidebarActive,
+  isAuthenticated,
+  changecookie,
+}) => {
   const navigate = useNavigate();
   const toggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
   };
-   changecookie(document.cookie);
+
+  useEffect(() => {
+    changecookie(document.cookie);
+  }, [changecookie]);
+
   const handleLogout = () => {
     document.cookie = "token=;expires=" + new Date().toUTCString();
-    
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -155,7 +162,6 @@ const Navbar = ({ setIsSidebarActive, isSidebarActive, isAuthenticated ,changeco
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 color="inherit"
-                onClick={handleLogout}
               >
                 <AccountCircle />
               </IconButton>

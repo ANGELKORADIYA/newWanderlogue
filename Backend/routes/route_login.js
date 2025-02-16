@@ -2,7 +2,7 @@ const express = require("express");
 const route_login = express.Router();
 const path = require("path");
 
-const { signup, login, signout, email } = require("../controllers/login");
+const { signup, login, signout, email } = require("../controllers/auth");
 
 
 

@@ -18,7 +18,7 @@ module.exports.getLikes = async function (req, res) {
     if (existingDashboard.favorites && existingDashboard.favorites.length > 0) {
       for (let i = 0; i < existingDashboard.favorites.length; i++) {
         if (
-          existingDashboard.favorites[i].toString() === req.userId.toString()
+          existingDashboard.favorites[i].toString() === req.userId
         ) {
           return res.status(200).json({
             likedset: true,
