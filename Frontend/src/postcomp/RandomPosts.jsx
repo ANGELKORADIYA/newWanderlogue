@@ -3,6 +3,7 @@ import PostDetails from './PostDetails';
 import './randomposts.css';
 import { post } from '../Rest';
 import { Link } from 'react-router-dom';
+import GoogleAdsComponent from './GoogleAds';
 const RandomPosts = (props) => {
   const [allPosts, setAllPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +54,7 @@ const RandomPosts = (props) => {
         {!isLoading && <button onClick={handleLoadMore} className='loadmore'>Load More ...</button>}
       </div>
       <div className="ads">
-        {/* <GoogleAdsComponent /> */}
+        <GoogleAdsComponent />
       </div>  
     </div>
 

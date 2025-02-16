@@ -1,42 +1,26 @@
-import React from 'react';
-import { GoogleAds } from 'react-google-ads';
+import React, { useEffect } from 'react';
 
 const GoogleAdsComponent = () => {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://cdn.ampproject.org/v0.js';
+    document.head.appendChild(script);
+  }, []);
+
   return (
-    <GoogleAds
-      client="ca-pub-xxxxxxxxxx"
-      slot="xxxxxxxxxx"
-      format="auto"
-      responsive="true"
-    />
+    <amp-ad
+      width="100vw"
+      height="320"
+      type="adsense"
+      data-ad-client="ca-pub-8903937759165446"
+      data-ad-slot="6817945399"
+      data-auto-format="rspv"
+      data-full-width=""
+    >
+      <div overflow=""></div>
+    </amp-ad>
   );
 };
 
 export default GoogleAdsComponent;
-
-
-
-// import React, { useEffect } from 'react';
-
-// // const GoogleAdsComponent = () => {
-// //   useEffect(() => {
-// //     const script = document.createElement('script');
-// //     script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-// //     script.async = true;
-// //     script.crossOrigin = 'anonymous';
-// //     document.body.appendChild(script);
-
-// //     (window.adsbygoogle = window.adsbygoogle || []).push({});
-// //   }, []);
-
-// //   return (
-// //     <ins className="adsbygoogle"
-// //       style={{ display: 'block' }}
-// //       data-ad-client="ca-pub-xxxxxxxxxx"
-// //       data-ad-slot="xxxxxxxxxx"
-// //       data-ad-format="auto"
-// //       data-full-width-responsive="true"></ins>
-// //   );
-// // };
-
-// // export default GoogleAdsComponent;
