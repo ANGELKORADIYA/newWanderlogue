@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const { loginModel } = require("../models/loginschema");
+const { loginModel } = require("../models/loginSchema");
 /*  
 signup takes :-
   password
