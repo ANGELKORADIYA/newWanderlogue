@@ -8,12 +8,13 @@ import {
   InputBase,
   Box,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled } from "@mui/material/styles";
 import logo from "./logo.png";
+import { toast } from "react-toastify";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   flexGrow: 1,
@@ -99,18 +100,21 @@ const Navbar = ({
   isAuthenticated,
   changecookie,
 }) => {
-  const navigate = useNavigate();
   const toggleSidebar = () => {
     setIsSidebarActive(!isSidebarActive);
   };
 
-  useEffect(() => {
-    changecookie(document.cookie);
-  }, [changecookie]);
+  // useEffect(() => {
+  //   changecookie(document.cookie);
+  // }, [changecookie]);
 
   const handleLogout = () => {
     document.cookie = "token=;expires=" + new Date().toUTCString();
-    navigate("/login");
+    toast.success("Logged out successfully!", { position: "bottom-center" });
+    
+    changecookie(document.cookie);
+    window.location.reload();
+
   };
 
   return (

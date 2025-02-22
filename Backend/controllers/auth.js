@@ -204,7 +204,7 @@ module.exports.tokenemail = async (req, res) => {
       if (result) {
         return {
           tokentoemail: result.email,
-          tokentouserId: valid.email,
+          tokentouserId:result.email,
           tokentoauthor: result.user,
         };
       }

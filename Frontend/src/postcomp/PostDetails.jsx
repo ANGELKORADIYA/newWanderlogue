@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, IconButton, CircularProgress } from "@mui/material";
 import { FavoriteBorder, Comment, Favorite } from "@mui/icons-material";
 import Skeleton from "@mui/material/Skeleton";
 import PhotoGallery from "./PhotoGallery";
 import "./postdetails.css";
 import { post } from "../Rest";
 import CommentPopup from "../gencomment/CommentPopup";
+import { toast } from 'react-toastify';
 
 const PostDetails = ({ postData }) => {
   const [comments, setComments] = useState([]);
@@ -49,32 +50,47 @@ const PostDetails = ({ postData }) => {
   };
   const handleLike = async () => {
     setIsSkeleton(true);
-    const { likedset, likedhowmany } = await post("favorites/post-likes", {
-      postId: postData._id,
-    });
-    sethowmanyliked(likedhowmany);
-    setIsliked(likedset);
-    setIsSkeleton(false);
+    try {
+      const { likedset, likedhowmany } = await post("favorites/post-likes", {
+        postId: postData._id,
+      });
+      sethowmanyliked(likedhowmany);
+      setIsliked(likedset);
+      toast.success('Post liked successfully!',{ position: "bottom-center",});
+    } catch (error) {
+      toast.error('Failed to like post. Please try again.',{ position: "bottom-center",});
+    } finally {
+      setIsSkeleton(false);
+    }
   };
 
   const handleOpenCommentPopup = async() => {
-    const res = await post("comments/get-comments", {
-      postId: postData._id,
-    });
-    setYourComments(res.yourComments);
-    setComments(res.comments);
-    setIsCommentPopupOpen(true);
-
+    try {
+      const res = await post("comments/get-comments", {
+        postId: postData._id,
+      });
+      setYourComments(res.yourComments);
+      setComments(res.comments);
+      setIsCommentPopupOpen(true);
+      // toast.success('Comments fetched successfully!',{ position: "bottom-center",});
+    } catch (error) {
+      toast.error('Failed to fetch comments. Please try again.',{ position: "bottom-center",});
+    }
   };
   const handleCloseCommentPopup = () => {
     setIsCommentPopupOpen(false);
   };
   const handleAddComment = async(newComment) => {
-    const res = await post("comments/post-comments", {
-      postId: postData._id,
-      content: newComment,
-    });
-    setYourComments([...yourComments, newComment]);
+    try {
+      const res = await post("comments/post-comments", {
+        postId: postData._id,
+        content: newComment.content,
+      });
+      setYourComments([...yourComments, newComment]);
+      toast.success('Comment added successfully!',{ position: "bottom-center"});
+    } catch (error) {
+      toast.error('Failed to add comment. Please try again.',{ position: "bottom-center",});
+    }
   };
   return (
     <Box className="post-details-container">
@@ -91,7 +107,7 @@ const PostDetails = ({ postData }) => {
         <Box className="actions">
           <IconButton>
             {isSkeleton ? (
-              <Skeleton variant="circular" width={30} height={30} />
+              <CircularProgress size={24} />
             ) : isliked ? (
               <>
                 <Favorite onClick={handleLike} />

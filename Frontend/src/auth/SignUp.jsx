@@ -72,15 +72,51 @@ const SignUpPopup = (props) => {
       });
 
       if (response.okk) {
-        toast.success("🦄 Sign Up Successfully !!");
+        toast.success("🦄 Sign Up Successfully !!", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          style: {
+            zIndex: 9999999
+          }
+        });
         props.onSignUpSuccess()
         navigate("/login");
       } else {
-        toast.warn(response.message);
+        toast.warn(response.message, {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          style: {
+            zIndex: 9999999
+          }
+        });
       }
     } catch (error) {
       console.error("Sign up failed:", error);
-      toast.error("Oops! Something went wrong. Please try again.");
+      toast.error("Oops! Something went wrong. Please try again.", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        style: {
+          zIndex: 9999999
+        }
+      });
     } finally {
       setLoading(false); // Reset loading state
       document.body.style.cursor = "default"; // Reset cursor to default after processing

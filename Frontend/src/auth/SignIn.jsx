@@ -62,7 +62,7 @@ const SignInPopup = ({ open, setinorout , changecookie }) => {
         ).toUTCString()};`;
 
         toast.success("🦄 Log in Successfully !!", {
-          position: "top-right",
+          position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -70,12 +70,15 @@ const SignInPopup = ({ open, setinorout , changecookie }) => {
           draggable: true,
           progress: undefined,
           theme: "light",
+          style: {
+            zIndex: 9999999
+          }
         });
         changecookie(document.cookie);
         navigate("/dashboard");
       } else {
         toast.warn(response.message, {
-          position: "top-right",
+          position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -83,13 +86,16 @@ const SignInPopup = ({ open, setinorout , changecookie }) => {
           draggable: true,
           progress: undefined,
           theme: "light",
+          style: {
+            zIndex: 9999999
+          }
         });
         setEmail("");
         setPassword("");
       }
     } catch (error) {
       toast.error("Login failed. Please try again.", {
-        position: "top-right",
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -97,6 +103,9 @@ const SignInPopup = ({ open, setinorout , changecookie }) => {
         draggable: true,
         progress: undefined,
         theme: "light",
+        style: {
+          zIndex: 9999999
+        }
       });
     } finally {
       setTimeout(() => {

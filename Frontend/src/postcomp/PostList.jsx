@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import PostDetails from './PostDetails';
 import './postlist.css';
-import { post,get } from '../Rest';
+import { post } from '../Rest';
+import { Link } from 'react-router-dom';
+import GoogleAdsComponent from './GoogleAds';
+import { Box, Typography, Button, CircularProgress, Grid } from '@mui/material';
 
 const PostList = (props) => {
   const [isLoading, setIsLoading] = useState(true);
-  
-  const [posts, setposts] = useState([])
-  
+  const [posts, setposts] = useState([]);
+
   useEffect(() => {
-    let isMounted = true; // Track if the component is mounted
+    let isMounted = true;
 
     const fetchPosts = async () => {
       setIsLoading(true);
-      setposts([]); // Clear previous posts
+      setposts([]);
       const fetchedPosts = await post(`post/${props.siteurl}`);
       if (isMounted) {
         setposts(fetchedPosts);
@@ -24,21 +26,39 @@ const PostList = (props) => {
     fetchPosts();
 
     return () => {
-      isMounted = false; // Cleanup function to avoid setting state on unmounted component
+      isMounted = false;
     };
   }, [props.siteurl]);
 
-  return (<div className={`random-posts  ${props.isSidebarActive?"post-list-onsiderbar":""}`} >
-      {posts.map((postData, index) => (
-        <>
-        <PostDetails key={index} postData={postData} />
-        </>
-      ))}
-
-      {isLoading && <p className='loadmore' >Loading...</p> }
-      {posts.length==0 && !isLoading && <p>You dont have any posts </p>}
-      </div>
+  return (
+    <Grid container spacing={2}>
+      <Grid item xs={2}>
+        <Box className="sidebar">
+          <Link to="/trending">Trending Posts</Link>
+          <Link to="/top-commented">Top Commented Posts</Link>
+          <Link to="/popular">Popular Posts</Link>
+        </Box>
+      </Grid>
+      <Grid item xs={8}>
+        <Box className={`random-posts ${props.isSidebarActive ? "post-list-onsiderbar" : ""}`}>
+          <Grid container spacing={2}>
+            {posts.map((postData, index) => (
+              <Grid item xs={12} key={index}>
+                <PostDetails postData={postData} />
+              </Grid>
+            ))}
+          </Grid>
+          {isLoading && <CircularProgress style={{ marginTop: '30px' }}/>}
+          {posts.length === 0 && !isLoading && <Typography style={{ marginTop: '30px' }}>You don't have any posts</Typography>}
+        </Box>
+      </Grid>
+      <Grid item xs={2}>
+        <Box className="ads">
+          <GoogleAdsComponent />
+        </Box>
+      </Grid>
+    </Grid>
   );
-}; 
+};
 
 export default PostList;

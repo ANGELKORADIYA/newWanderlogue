@@ -40,9 +40,8 @@ module.exports.postComments = async function (req, res) {
     if (!existingDashboard) {
       return res.status(404).json({ message: "Post not found" });
     }
-    console.log(req.body.content);
     const newComment = await commentModel.create({
-      content: req.body.content.content,
+      content: req.body.content,
       postId: req.body.postId,
       userId: req.userId,
     });

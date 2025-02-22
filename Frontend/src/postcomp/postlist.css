@@ -2,10 +2,19 @@
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    transition: margin-left 0.5s ease; /* Add transition */
+    transition: margin-left 0.5s ease;
     justify-content: center;
-  }
-  .post-list-onsiderbar{
+    min-width: 500px; /* Added minimum width */
+}
+
+.post-list-onsiderbar {
     margin-left: 300px;
-    transition: margin-left 0.1s ease; /* Add transition */
+    transition: margin-left 0.1s ease;
+}
+
+/* Added specific styling for posts */
+.post-details-container {
+    min-width: 380px;
+    width: calc(33.33% - 20px); /* Makes posts take up roughly 1/3 of container minus gap */
+    margin-bottom: 20px;
 }

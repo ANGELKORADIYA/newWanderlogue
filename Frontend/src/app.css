@@ -10,3 +10,32 @@
   padding: 0;
   list-style: none;
 }
+
+body {
+  font-family: 'Anonymous Pro', monospace;
+  font-weight: 700;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+button {
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 700;
+}
+
+/* Add more global styles as needed */

@@ -11,7 +11,7 @@ module.exports.createpost = async function (req, res) {
   try {
     let newDetails = req.body;
     newDetails.location = `${newDetails.country} ${newDetails.state} ${newDetails.district}`;
-    newDetails.userId = req.userId;
+    newDetails.userId = req.email;
     newDetails.author = req.author;
     delete newDetails.country;
     delete newDetails.state;
@@ -27,7 +27,7 @@ module.exports.createpost = async function (req, res) {
 
 module.exports.myposts = async function (req, res) {
   try {
-    const existingDashboard = await postModel.find({ userId: req.userId });
+    const existingDashboard = await postModel.find({ userId: req.email });
     res.status(200).json(existingDashboard);
   } catch (error) {
     console.log(error);
@@ -47,7 +47,7 @@ module.exports.fetchposts = async function (req, res) {
 
 module.exports.fetchfavorites = async function (req, res) {
   try {
-    const postIdsfromUserId = await favoriteModel.find({ userId: req.userId });
+    const postIdsfromUserId = await favoriteModel.find({ userId: req.email });
     const posts = await postModel.find({ _id: { $in: postIdsfromUserId[0].postId } });
     res.status(200).json(posts);
   } catch (error) {
@@ -58,7 +58,7 @@ module.exports.fetchfavorites = async function (req, res) {
 
 module.exports.fetchcomments = async function (req, res) {
   try {
-    const postIdsfromUserId = await commentModel.find({ userId: req.userId });
+    const postIdsfromUserId = await commentModel.find({ userId: req.email });
     const posts = await postModel.find({ _id: { $in: postIdsfromUserId[0].postId } });
     res.status(200).json(posts);
   } catch (error) {

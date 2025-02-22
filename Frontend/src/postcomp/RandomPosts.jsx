@@ -4,6 +4,8 @@ import './randomposts.css';
 import { post } from '../Rest';
 import { Link } from 'react-router-dom';
 import GoogleAdsComponent from './GoogleAds';
+import { Box, Button, CircularProgress } from '@mui/material';
+
 const RandomPosts = (props) => {
   const [allPosts, setAllPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +22,6 @@ const RandomPosts = (props) => {
   const fetchMorePosts = async () => {
     setIsLoading(true);
     const newPosts = await post('post/fetch-posts');
-    console.log(newPosts);
     setAllPosts((prevPosts) => [...prevPosts, ...newPosts]);
     setIsLoading(false);
   };
@@ -38,26 +39,25 @@ const RandomPosts = (props) => {
   };
 
   return (
-    <div className="grid-container">
-      <div className="sidebar">
+    <Box className="grid-container">
+      <Box className="sidebar">
         <Link to="/trending">Trending Posts</Link>
         <Link to="/top-commented">Top Commented Posts</Link>
         <Link to="/popular">Popular Posts</Link>
-      </div> 
-      <div className={`random-posts ${props.isSidebarActive ? 'post-list-onsiderbar' : ''}`}>
+      </Box> 
+      <Box className={`random-posts ${props.isSidebarActive ? 'post-list-onsiderbar' : ''}`}>
         {allPosts.length > 0 &&
           allPosts.map((postData, index) => (
             <PostDetails key={index} postData={postData} />
           ))}
 
-        {isLoading && <p className='loadmore'>Loading...</p>}
-        {!isLoading && <button onClick={handleLoadMore} className='loadmore'>Load More ...</button>}
-      </div>
-      <div className="ads">
+        {isLoading && <CircularProgress />}
+        {!isLoading && <Button onClick={handleLoadMore} className='loadmore'>Load More ...</Button>}
+      </Box>
+      <Box className="ads">
         <GoogleAdsComponent />
-      </div>  
-    </div>
-
+      </Box>  
+    </Box>
   );
 };
 

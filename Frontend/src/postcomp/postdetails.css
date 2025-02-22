@@ -5,21 +5,23 @@
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 10px;
-  }
+    min-width: 400px;
+    width: 100%;
+    max-width: 600px;
+}
   
-  .post-details {
+.post-details {
     padding: 20px;
-  }
+}
   
-  .actions {
+.actions {
     display: flex;
     justify-content: space-around;
     margin-top: 10px;
-  }
+}
   
-  .location {
+.location {
     margin-top: 20px;
     padding: 20px;
     border-top: 1px solid #ddd;
-  }
-  
+}

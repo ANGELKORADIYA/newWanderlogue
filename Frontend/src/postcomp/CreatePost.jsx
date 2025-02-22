@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './createpost.css';
-import {post} from '../Rest'
+import { post } from '../Rest';
+import { toast } from 'react-toastify';
+import { Box, TextField, Button, Typography, MenuItem, CircularProgress } from '@mui/material';
+import PhotoGallery from './PhotoGallery';
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
@@ -14,97 +17,213 @@ const CreatePost = () => {
   const [photos, setPhotos] = useState([]);
   const [rating, setRating] = useState(3);
   const [itinerary, setItinerary] = useState('');
-const [photoData,setPhotoData]=useState([])
+  const [photoData, setPhotoData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-useEffect(() => {
-  (async ()=>{
+  useEffect(() => {
+    (async () => {
+      setPhotoData(
+        await Promise.all(
+          Array.from(photos).map(async (photo) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(photo);
+            return new Promise((resolve, reject) => {
+              reader.onload = () => resolve({ src: reader.result, name: photo.name });
+              reader.onerror = (error) => reject(error);
+            });
+          })
+        )
+      );
+    })();
+  }, [photos]);
 
-    setPhotoData(await Promise.all(
-      Array.from(photos).map(async (photo) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(photo);
-        return new Promise((resolve, reject) => {
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        });
-      })
-    ))
-  })()
-}, [photos])
-
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if(title,destination,date,description,country,state,district,category,photos,photoData.length>0,rating,itinerary){
-      await post("post/createpost",{title,destination,date,description,country,state,district,category,photoData,rating,itinerary})
+    if (loading) return;
+    setLoading(true);
+    document.body.style.cursor = 'wait';
+
+    if (
+      title &&
+      destination &&
+      date &&
+      description &&
+      country &&
+      state &&
+      district &&
+      category &&
+      photos &&
+      photoData.length > 0 &&
+      rating &&
+      itinerary
+    ) {
+      try {
+        await post('post/createpost', {
+          title,
+          destination,
+          date,
+          description,
+          country,
+          state,
+          district,
+          category,
+          photoData,
+          rating,
+          itinerary,
+        });
+        toast.success('Post created successfully!', { position: 'bottom-center' });
+        setTitle('');
+        setDestination('');
+        setDate('');
+        setDescription('');
+        setCountry('');
+        setState('');
+        setDistrict('');
+        setCategory('');
+        setPhotos([]);
+        setRating(3);
+        setItinerary('');
+        setPhotoData([]);
+      } catch (error) {
+        toast.error('Failed to create post. Please try again.', { position: 'bottom-center' });
+      } finally {
+        setLoading(false);
+        document.body.style.cursor = 'default';
+      }
     }
   };
   return (
-    <div className="upload-form-container">
-      <h2>Upload Travel Log</h2>
+    <Box className="upload-form-container" sx={{ marginTop: 4 }}>
+      <Typography variant="h4" gutterBottom>Upload Travel Log</Typography>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Title</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label>Destination</label>
-          <input type="text" value={destination} onChange={(e) => setDestination(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label>Date</label>
-          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label>Description</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label>Country</label>
-          <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label>State</label>
-          <input type="text" value={state} onChange={(e) => setState(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label>District</label>
-          <input type="text" value={district} onChange={(e) => setDistrict(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label>Category</label>
-          <div className="select-wrapper">
-            <select value={category} onChange={(e) => setCategory(e.target.value)} required>
-              <option value="">Select a category</option>
-              <option value="Adventure">Adventure</option>
-              <option value="Beach">Beach</option>
-              <option value="City">City</option>
-              {/* Add more categories as needed */}
-            </select>
-          </div>
-        </div>
-        <div className="form-group">
-          <label>Photos</label>
-          <input type="file" multiple onChange={(e) => setPhotos(e.target.files)} required />
-        </div>
-        <div className="form-group">
-        <label>Rating</label>
-  <div className="rating">
-    {[...Array(5)].map((_, index) => (
-      <React.Fragment key={index}>
-        <input  type="radio" id={`star${index + 1}`} name="rating" value={5 - index} onChange={() => setRating(5 - index)} checked={rating === 5 - index} />
-        <label htmlFor={`star${index + 1}`}>★</label>
-      </React.Fragment>
-    ))}
-  </div>
-        </div>
-        <div className="form-group">
-          <label>Travel Itinerary</label>
-          <textarea value={itinerary} onChange={(e) => setItinerary(e.target.value)} />
-        </div>
-        <button type="submit">Upload</button>
+        <TextField
+          label="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Destination"
+          value={destination}
+          onChange={(e) => setDestination(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Date"
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <TextField
+          label="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+          multiline
+          rows={4}
+        />
+        <TextField
+          label="Country"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="State"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="District"
+          value={district}
+          onChange={(e) => setDistrict(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Category"
+          select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        >
+          <MenuItem value="Adventure">Adventure</MenuItem>
+          <MenuItem value="Beach">Beach</MenuItem>
+          <MenuItem value="City">City</MenuItem>
+          {/* Add more categories as needed */}
+        </TextField>
+        <Box sx={{ my: 3, p: 2, borderRadius: 2, bgcolor: 'background.paper' }}>
+          <Button
+            variant="contained"
+            component="label"
+            fullWidth
+            sx={{ mb: 2 }}
+          >
+            Choose Photos
+            <input
+              type="file"
+              hidden
+              multiple
+              onChange={(e) => setPhotos(e.target.files)}
+            />
+          </Button>
+    
+          {photoData.length > 0 && (
+            <Box sx={{ mt: 2 }}>
+              <PhotoGallery photos={photoData} showName={true} />
+            </Box>
+          )}
+        </Box>
+        <Box className="rating" sx={{ marginTop: 4 }}>
+          {[...Array(5)].map((_, index) => (
+            <React.Fragment key={index}>
+              <input
+                type="radio"
+                id={`star${index + 1}`}
+                name="rating"
+                value={5 - index}
+                onChange={() => setRating(5 - index)}
+                checked={rating === 5 - index}
+              />
+              <label htmlFor={`star${index + 1}`}>★</label>
+            </React.Fragment>
+          ))}
+        </Box>
+        <TextField
+          label="Travel Itinerary"
+          value={itinerary}
+          required
+          onChange={(e) => setItinerary(e.target.value)}
+          fullWidth
+          margin="normal"
+          multiline
+          rows={4}
+        />
+        <Button type="submit" variant="contained" color="primary" disabled={loading} fullWidth>
+          {loading ? <CircularProgress size={24} /> : 'Upload'}
+        </Button>
       </form>
-    </div>
+    </Box>
   );
 };
 

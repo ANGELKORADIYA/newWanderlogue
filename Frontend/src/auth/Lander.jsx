@@ -35,8 +35,8 @@ const RootBox = styled(Box)({
 
 const ContentContainer = styled(Paper)(({ theme }) => ({
   display: "flex",
-  width: "80%",
-  height: "60%",
+  width: "85%",
+  height: "75%",
   borderRadius: "15px",
   overflow: "hidden",
   boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
@@ -52,6 +52,7 @@ const ImageContainer = styled(Box)({
   backgroundSize: "cover",
   backgroundPosition: "center",
   animation: `${slideIn} 1s ease-out`,
+  alt: "Travel destination image",
 });
 
 const TextContainer = styled(Box)({
@@ -62,6 +63,15 @@ const TextContainer = styled(Box)({
   padding: "2rem",
   backgroundColor: "rgba(255, 255, 255, 0.9)",
   animation: `${fadeIn} 2s ease-in`,
+  h1: {
+    fontSize: "2.5rem",
+  },
+  h2: {
+    fontSize: "2.1rem",
+  },
+  h3: {
+    fontSize: "1.2rem",
+  },
 });
 
 const ButtonContainer = styled(Box)({
@@ -85,12 +95,14 @@ const LandingPage = (props) => {
         <ContentContainer>
           <ImageContainer />
           <TextContainer>
-            <Typography variant="h3" gutterBottom>
+            <Typography variant="h1" gutterBottom>
               Welcome to {props.title}
             </Typography>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h2" gutterBottom>
               Explore the world, one post at a time.
-
+            </Typography>
+            <Typography variant="h3" gutterBottom>
+              Wanderlogue is a platform to discover and share amazing travel experiences. Users can create posts about their travel adventures, including details like the destination, date, description, location, category, photos, rating, itinerary, and more. Interact with like-minded travelers by commenting on posts, adding favorites, and rating the experiences.
             </Typography>
             <ButtonContainer>
               <Button
